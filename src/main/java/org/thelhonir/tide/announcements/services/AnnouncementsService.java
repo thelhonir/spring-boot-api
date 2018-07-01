@@ -46,7 +46,7 @@ public class AnnouncementsService {
     @Async
     public CompletableFuture<Announcement> createAnnouncement(String id) throws AnnouncementAlreadyExistsException {
         if (!this.announcementExists(id)) {
-            Announcement announcement = new Announcement.AnnouncementBuilder().withId(id).build();
+            Announcement announcement = this.buildAnnouncement(id);
             this.announcementMap.put(id, announcement);
             return CompletableFuture.completedFuture(announcement);
         } else {
@@ -88,11 +88,22 @@ public class AnnouncementsService {
         }
     }
 
+    public void clearHazelcastInstance() {
+        this.hzInstance.getMap(HazelcastConfiguration.ANNOUNCEMENTS_MAP).clear();
+    }
+
     /**
      * Checks if the id exists in the hazelcast in-memory map
      */
     private Boolean announcementExists(String id) {
         return this.announcementMap.containsKey(id);
+    }
+
+    /**
+     * Given an id builds an announcement
+     */
+    private Announcement buildAnnouncement(String id) {
+        return new Announcement.AnnouncementBuilder().withId(id).build();
     }
 
 }

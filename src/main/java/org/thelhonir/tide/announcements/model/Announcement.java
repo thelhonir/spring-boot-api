@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Announcement implements Serializable {
+    
     private static final long serialVersionUID = 6736077110147103463L;
     private final String id;
     private long likes;

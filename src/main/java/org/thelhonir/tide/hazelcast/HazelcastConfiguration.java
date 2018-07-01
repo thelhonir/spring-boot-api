@@ -1,9 +1,7 @@
 package org.thelhonir.tide.hazelcast;
 
 import com.hazelcast.config.Config;
-import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MaxSizeConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,10 +13,7 @@ public class HazelcastConfiguration {
 
     @Bean
     public Config hazelcastConfig() {
-        return new Config().setInstanceName(INSTANCE_NAME)
-                .addMapConfig(new MapConfig().setName(ANNOUNCEMENTS_MAP)
-                        .setMaxSizeConfig(new MaxSizeConfig(500, MaxSizeConfig.MaxSizePolicy.FREE_HEAP_SIZE))
-                        .setEvictionPolicy(EvictionPolicy.LRU).setTimeToLiveSeconds(20));
-
+        return new Config().setInstanceName(INSTANCE_NAME).addMapConfig(new MapConfig().setName(ANNOUNCEMENTS_MAP));
     }
+
 }

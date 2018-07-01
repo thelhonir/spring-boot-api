@@ -41,6 +41,7 @@ public class AnnouncementsService {
      * in-memory map Checks if the id exists in the hazelcast in-memory map
      * 
      * @return a completed future with the created announcement
+     * @throws AnnouncementAlreadyExistsException
      */
     @Async
     public CompletableFuture<Announcement> createAnnouncement(String id) throws AnnouncementAlreadyExistsException {
@@ -58,11 +59,17 @@ public class AnnouncementsService {
      * in-memory map
      * 
      * @return a completed future with the updated announcement
+     * @throws AnnouncementNotFoundException
      */
     @Async
-    public CompletableFuture<Announcement> updateAnnouncement(Announcement announcement) {
-        this.announcementMap.put(announcement.getId(), announcement);
-        return CompletableFuture.completedFuture(announcement);
+    public CompletableFuture<Announcement> updateAnnouncement(Announcement announcement)
+            throws AnnouncementNotFoundException {
+        if (this.announcementExists(announcement.getId())) {
+            this.announcementMap.put(announcement.getId(), announcement);
+            return CompletableFuture.completedFuture(announcement);
+        } else {
+            throw new AnnouncementNotFoundException();
+        }
     }
 
     /**
@@ -70,10 +77,15 @@ public class AnnouncementsService {
      * map
      * 
      * @return a completed future with the retrieved announcement
+     * @throws AnnouncementNotFoundException
      */
     @Async
     public CompletableFuture<Announcement> getAnnouncement(String id) throws AnnouncementNotFoundException {
-        return CompletableFuture.completedFuture(this.announcementMap.get(id));
+        if (this.announcementExists(id)) {
+            return CompletableFuture.completedFuture(this.announcementMap.get(id));
+        } else {
+            throw new AnnouncementNotFoundException();
+        }
     }
 
     /**
@@ -82,4 +94,5 @@ public class AnnouncementsService {
     private Boolean announcementExists(String id) {
         return this.announcementMap.containsKey(id);
     }
+
 }

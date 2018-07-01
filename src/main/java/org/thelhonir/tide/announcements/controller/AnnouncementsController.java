@@ -36,8 +36,8 @@ public class AnnouncementsController {
     public ResponseEntity<?> createAnnouncement(@RequestBody String id) {
         try {
             if (Objects.nonNull(id)) {
-                Announcement announcement = this.announcementsService.createAnnouncement(id).get();
-                return new ResponseEntity<Announcement>(announcement, HttpStatus.CREATED);
+                return new ResponseEntity<Announcement>(this.announcementsService.createAnnouncement(id).get(),
+                        HttpStatus.CREATED);
             } else {
                 throw new NullPointerException();
             }
@@ -56,8 +56,8 @@ public class AnnouncementsController {
             if (Objects.nonNull(id)) {
                 Announcement announcement = this.announcementsService.getAnnouncement(id).get();
                 announcement.like();
-                Announcement responseAnnouncement = this.announcementsService.updateAnnouncement(announcement).get();
-                return new ResponseEntity<Announcement>(responseAnnouncement, HttpStatus.OK);
+                return new ResponseEntity<Announcement>(
+                        this.announcementsService.updateAnnouncement(announcement).get(), HttpStatus.OK);
             } else {
                 throw new NullPointerException();
             }
@@ -76,8 +76,8 @@ public class AnnouncementsController {
             if (Objects.nonNull(id)) {
                 Announcement announcement = this.announcementsService.getAnnouncement(id).get();
                 announcement.dislike();
-                Announcement responseAnnouncement = this.announcementsService.updateAnnouncement(announcement).get();
-                return new ResponseEntity<Announcement>(responseAnnouncement, HttpStatus.OK);
+                return new ResponseEntity<Announcement>(
+                        this.announcementsService.updateAnnouncement(announcement).get(), HttpStatus.OK);
             } else {
                 throw new NullPointerException();
             }

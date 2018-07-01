@@ -37,7 +37,7 @@ public class AnnouncementsService {
     }
 
     /**
-     * Creates in an asyncronous way a new announcement storing it in the hazelcast
+     * Builds in an asyncronous way a new announcement storing it in the hazelcast
      * in-memory map Checks if the id exists in the hazelcast in-memory map
      * 
      * @return a completed future with the created announcement
@@ -46,7 +46,7 @@ public class AnnouncementsService {
     @Async
     public CompletableFuture<Announcement> createAnnouncement(String id) throws AnnouncementAlreadyExistsException {
         if (!this.announcementExists(id)) {
-            Announcement announcement = new Announcement(id);
+            Announcement announcement = new Announcement.AnnouncementBuilder().withId(id).build();
             this.announcementMap.put(id, announcement);
             return CompletableFuture.completedFuture(announcement);
         } else {
